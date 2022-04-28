@@ -25,16 +25,27 @@ function readPromise(file: string): Promise<IEmojis[]> {
   });
 }
 
-(async function () {
-  const file1Json = await readPromise(file1);
-  const file2Json = await readPromise(file2);
+function encodeUnicode(str: string) {
+  let res = [];
+  for (let i = 0; i < str.length; i++) {
+    res[i] = ("00" + str.charCodeAt(i).toString(16)).slice(-4);
+  }
+  return "\\u" + res.join("\\u");
+}
 
-  file1Json.map((item, index, arr) => {
-    file2Json.map((i) => {
-      if (item.name === i.name) {
-        arr[index].description = i.description;
-      }
-    });
+(async function () {
+  // const file1Json = await readPromise(file1);
+  const file2Json = await readPromise(file3);
+
+  // file1Json.map((item, index, arr) => {
+  //   file2Json.map((i) => {
+  //     if (item.name === i.name) {
+  //       arr[index].description = encodeUnicode(i.description);
+  //     }
+  //   });
+  // });
+  file2Json.forEach((item, index, arr) => {
+    arr[index].description = encodeUnicode(item.description);
   });
-  writeFileSync(file3, JSON.stringify(file1Json), "utf8");
+  writeFileSync(file3, JSON.stringify(file2Json), "utf8");
 })();

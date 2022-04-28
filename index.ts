@@ -34,18 +34,18 @@ function encodeUnicode(str: string) {
 }
 
 (async function () {
-  // const file1Json = await readPromise(file1);
-  const file2Json = await readPromise(file3);
-
-  // file1Json.map((item, index, arr) => {
-  //   file2Json.map((i) => {
-  //     if (item.name === i.name) {
-  //       arr[index].description = encodeUnicode(i.description);
-  //     }
-  //   });
-  // });
-  file2Json.forEach((item, index, arr) => {
-    arr[index].description = encodeUnicode(item.description);
+  const file1Json = await readPromise(file1);
+  const file2Json = await readPromise(file2);
+  file1Json.map((item, index, arr) => {
+    file2Json.map((i) => {
+      if (item.name === i.name) {
+        console.log(i.description);
+        arr[index].description = i.description;
+      }
+    });
   });
-  writeFileSync(file3, JSON.stringify(file2Json), "utf8");
+  // file2Json.forEach((item, index, arr) => {
+  //   arr[index].description = encodeUnicode(item.description);
+  // });
+  writeFileSync(file3, JSON.stringify(file1Json));
 })();
